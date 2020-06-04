@@ -3,17 +3,18 @@
 # Exercise 1.27
 import csv, sys
 
-def portfolio(filename):
+def portfolio_cost(filename):
     with open(filename) as f:
-        next(f)
+        headers = next(f)
         cost = 0
-        
-        for line in csv.reader(f):
+
+        for lineno, line in enumerate(csv.reader(f), start=1):
             #line = line.split(',')
+            _record = dict(zip(headers, line))
             try:
                 cost += float(line[-1]) * int(line[-2])
             except ValueError as err:
-                print('Warning :', err)
+                print(f'Warning : Line {lineno}: Bad line: {line}: ', err)
         
     return cost
 
@@ -22,5 +23,5 @@ if len(sys.argv) == 2:
 else:
     filename = 'Data/portfolio.csv'
 
-cost = portfolio(filename)
+cost = portfolio_cost(filename)
 print('Total cost: ', cost)

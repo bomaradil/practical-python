@@ -5,20 +5,22 @@
 import csv
 
 portfolio = []
-#share = {}
+prices = {}
+report = []
+
 def read_portfolio(filename):
     with open(filename) as f:
-        next(f)
-        for row in csv.reader(f):
-            #holding = (row[0], int(row[1]), float(row[2]))
-            share = {'name' : row[0], 'shares' : int(row[1]), 'price' : float(row[2])}
+        rows = csv.reader(f)
+        headers = next(rows)
+        for row in rows:
+            #share = {'name' : row[0], 'shares' : int(row[1]), 'price' : float(row[2])}
+            share = dict(zip(headers, row))
             portfolio.append(share)
-    
     return portfolio
 
 def read_prices(filename):
     with open(filename) as f:
-        prices = {}
+        
         for row in csv.reader(f):
            # try:
            #     prices[row[0]] = float(row[1])
@@ -27,5 +29,33 @@ def read_prices(filename):
            if row:
                prices[row[0]] = float(row[1])
         return prices
-    
-def lose
+        
+def loss_gain():
+    total_price = 0
+    price_share = 0
+    for i in portfolio:
+        total_price += prices[i['name']] * i['shares']
+        price_share += i['shares'] * i['price']
+        
+    if total_price > price_share:
+        print('Your losses is: ', round(total_price - price_share, 2))
+    else:
+        print('your gain is: ', round(price_share - total_price, 2))
+
+def make_report(portfolio, prices):
+    for i in portfolio:
+        change = float(prices[i['name']] - i['price'])
+        report.append((i['name'], i['shares'], prices[i['name']], round(change, 2)))
+    return report
+
+def print_report(report):
+    headers = ('Name', 'Shares', 'Price', 'Change')
+    print('%10s %10s %10s %10s' % headers)
+    print('---------- ----------- ----------- -----------')
+    for name, shares, price, change in report:
+        print(f'{name:>10s} {shares:>10d} {"$":>6s}{price:<7.2f} {change:>10.2f}')
+
+#portfolio = read_portfolio('Data/portfolio.csv')
+#prices = read_prices('Data/prices.csv')
+#report = make_report(portfolio, prices)
+#print_report(report)
