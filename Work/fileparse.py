@@ -4,7 +4,6 @@
 
 import csv
 
-records = []
 
 
 def parse_csv(filename, select=None, types=None, has_headers=True, delimiter=',', silence_errors=False):
@@ -17,6 +16,7 @@ def parse_csv(filename, select=None, types=None, has_headers=True, delimiter=','
 
     with open(filename) as f:
         rows = csv.reader(f, delimiter=delimiter)
+        records = []
 
         if has_headers:     # if the csv file has a headers
             headers = next(rows)  # read the file headers
@@ -29,9 +29,9 @@ def parse_csv(filename, select=None, types=None, has_headers=True, delimiter=','
                     else:
                         print('select element are not in the headers of csv file')
                         break
-                headers = select
             # mapping the colum selection to indices
                 indices = [headers.index(colname) for colname in select]
+                headers = select
             else:
                 indices = []
 
@@ -40,7 +40,7 @@ def parse_csv(filename, select=None, types=None, has_headers=True, delimiter=','
                     continue
                 if indices:  # filter the row if specific colums were selected
                     row = [row[index] for index in indices]
-
+                    
                 if types:  # marking the type of values
                     try:
                         row = [func(val) for func, val in zip(types, row)]

@@ -2,7 +2,8 @@
 #
 # Exercise 2.4
 
-import csv
+import sys, csv
+from fileparse import parse_csv
 
 portfolio = []
 prices = {}
@@ -12,6 +13,7 @@ def read_portfolio(filename):
     '''
     create a dictionary inside a list from a csv file using a loop 
     '''
+    
     with open(filename) as f:
         rows = csv.reader(f)
         headers = next(rows)
@@ -87,10 +89,24 @@ def portfolio_report(portfolio_filename, price_filename):
     '''
     operating the script
     '''
-    read_portfolio(portfolio_filename)
-    read_prices(price_filename)
+    portfolio = parse_csv(portfolio_filename, select=['name', 'shares', 'price'], types=[str, int, float])
+    #read_portfolio(portfolio_filename)
+    prices = dict(parse_csv(price_filename, types=[str, float], has_headers=False))
+    #read_prices(price_filename)
     make_report(portfolio, prices)
     print_report(report)
+
+def main(argv):
+    if len(argv) != 3:
+        raise SystemExit(f'Usage: {sys.argv[0]} ' 'portfile pricefile')
+    portfolio_report(argv[1], argv[2])
+    #portfolio_filename = argv[1]
+    #price_filename = argv[2]
+    #return portfolio_filename, price_filename
+
+if __name__ == '__main__':
+    main(sys.argv)
+
 
 #portfolio = read_portfolio('Data/portfolio.csv')
 #prices = read_prices('Data/prices.csv')

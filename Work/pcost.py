@@ -2,6 +2,8 @@
 #
 # Exercise 1.27
 import csv, sys
+from sys import argv
+from fileparse import parse_csv
 
 def portfolio_cost(filename):
     with open(filename) as f:
@@ -18,10 +20,21 @@ def portfolio_cost(filename):
         
     return cost
 
-if len(sys.argv) == 2:
-    filename = sys.argv[1]
-else:
-    filename = 'Data/portfolio.csv'
+def portfolio_cost2(filename):
+    cost = 0
+    for i in parse_csv(filename, select=['shares', 'price'], types=[int, float]):
+        cost += i['price'] * i['shares']
+    return cost
 
-cost = portfolio_cost(filename)
-print('Total cost: ', cost)
+def main(argv):
+    if len(argv) == 2:
+        filename = argv[1]
+    else:
+        filename = 'Data/portfolio.csv'
+
+    cost = portfolio_cost2(filename)
+    print('Total cost: ', cost)
+
+if __name__ == '__main__':
+    main(sys.argv)
+    
