@@ -35,6 +35,18 @@ def read_portfolio_2(filename):
         portfolio = [ { colname: row[index] for colname, index in zip(select, indices) } for row in rows ]
     return portfolio
 
+from stock import Stock
+
+def read_portfolio_3(filename):
+    '''
+    create dic using class Stock in stock.py
+    '''
+    with open(filename) as f:
+        rows = csv.reader(f)
+        next(rows)
+        portfolio = [Stock(i[0], i[1], i[2]) for i in rows]
+    return portfolio
+  
 def read_prices(filename):
     '''
     create a list from a csv file
@@ -64,6 +76,22 @@ def loss_gain():
     else:
         print('your gain is: ', round(price_share - total_price, 2))
 
+def loss_gain_2():
+    '''
+    comparing the share price with the portfolio price and return if we make a gain or loss
+    using the read_porflio_3 class Stock
+    '''
+    total_price = 0
+    price_share = 0
+    #for i in portfolio:
+    total_price = sum(prices[s.name] * s.shares for s in portfolio)
+    price_share = sum(s.shares * s.price for s in portfolio)
+        
+    if total_price > price_share:
+        print('Your losses is: ', round(total_price - price_share, 2))
+    else:
+        print('your gain is: ', round(price_share - total_price, 2))
+
 def make_report(portfolio, prices):
     '''
     combining the info in the csv portfolio and price file 
@@ -72,6 +100,17 @@ def make_report(portfolio, prices):
     for i in portfolio:
         change = float(prices[i['name']]) - float(i['price'])
         report.append((i['name'], int(i['shares']), prices[i['name']], round(change, 2)))
+    return report
+
+def make_report_2(portfolio, prices):
+    '''
+    combining the info in the csv portfolio and price file using Class Stock
+    and making a list report for the name, total, price and change of the share 
+    ''' 
+    for s in portfolio:
+        change = float(prices[s.name]) - s.price
+        #print(change)
+        report.append((s.name, s.shares, s.price, round(change, 2)))
     return report
 
 def print_report(report):
@@ -85,30 +124,23 @@ def print_report(report):
         print(f'{name:>10s} {shares:>10d} {"$":>6s}{price:<7.2f} {change:>10.2f}')
 
 
+
 def portfolio_report(portfolio_filename, price_filename):
     '''
     operating the script
     '''
-    portfolio = parse_csv(portfolio_filename, select=['name', 'shares', 'price'], types=[str, int, float])
-    #read_portfolio(portfolio_filename)
-    prices = dict(parse_csv(price_filename, types=[str, float], has_headers=False))
-    #read_prices(price_filename)
-    make_report(portfolio, prices)
+    #portfolio = parse_csv(portfolio_filename, select=['name', 'shares', 'price'], types=[str, int, float])
+    portfolio = read_portfolio_3(portfolio_filename)
+    #prices = dict(parse_csv(price_filename, types=[str, float], has_headers=False))
+    read_prices(price_filename)
+    make_report_2(portfolio, prices)
     print_report(report)
 
 def main(argv):
     if len(argv) != 3:
         raise SystemExit(f'Usage: {sys.argv[0]} ' 'portfile pricefile')
     portfolio_report(argv[1], argv[2])
-    #portfolio_filename = argv[1]
-    #price_filename = argv[2]
-    #return portfolio_filename, price_filename
 
 if __name__ == '__main__':
     main(sys.argv)
 
-
-#portfolio = read_portfolio('Data/portfolio.csv')
-#prices = read_prices('Data/prices.csv')
-#report = make_report(portfolio, prices)
-#print_report(report)

@@ -9,6 +9,8 @@ def parse_csv(lines, select=None, types=None, has_headers=True, delimiter=',', s
     parse a csv file into a list of records
     '''
     if type(lines) is str:
+        #testing if the lines variable is a string ('Data/portfolio.csv')
+        #or a list or a return var (ex : gzip.open('Data/portfolio.csv.gz', 'rt') as file)
         f = open(lines, "r")
         rows = csv.reader(f, delimiter=delimiter)
     else:
