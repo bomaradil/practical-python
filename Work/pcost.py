@@ -44,7 +44,7 @@ def portfolio_cost3(filename):
     '''
     portdict = parse_csv(filename, select=['name','shares', 'price'], types=[str, int, float])
     portfolio = [Stock(i['name'], i['shares'], i['price']) for i in portdict]
-    cost = sum([s.cost() for s in portfolio])
+    cost = sum([s.cost for s in portfolio])
     return cost
 
 

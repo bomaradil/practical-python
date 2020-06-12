@@ -118,14 +118,25 @@ def print_report(report):
     printing the report 
     '''
     headers = ('Name', 'Shares', 'Price', 'Change')
-    print('%10s %10s %10s %10s' % headers)
-    print('---------- ----------- ----------- -----------')
+    print('%10s %10s %10s %10s' % headers)      #f'{headers:>10s}', end=' '
+    print('---------- ----------- ----------- -----------') # ('-'*10 + ' ')*len(headers)
     for name, shares, price, change in report:
         print(f'{name:>10s} {shares:>10d} {"$":>6s}{price:<7.2f} {change:>10.2f}')
 
+#from tableformat import TableFormatter as formatter
 
+def print_report_2(reportdata, formatter):
+    '''
+    print report using class TableFormtter from the tableformat.py
+    '''
+    formatter.headings(['Name', 'Shares', 'Price', 'Change'])
+    for name, shares, price, change in reportdata:
+        rowdata = [ name, str(shares), f'{price:0.2f}', f'{change:0.2f}' ]
+        formatter.row(rowdata)
 
-def portfolio_report(portfolio_filename, price_filename):
+import tableformat
+
+def portfolio_report(portfolio_filename, price_filename, fmt='txt'):
     '''
     operating the script
     '''
@@ -134,12 +145,13 @@ def portfolio_report(portfolio_filename, price_filename):
     #prices = dict(parse_csv(price_filename, types=[str, float], has_headers=False))
     read_prices(price_filename)
     make_report_2(portfolio, prices)
-    print_report(report)
+    formatter = tableformat.create_formatter(fmt)
+    print_report_2(report, formatter)
 
 def main(argv):
-    if len(argv) != 3:
-        raise SystemExit(f'Usage: {sys.argv[0]} ' 'portfile pricefile')
-    portfolio_report(argv[1], argv[2])
+    if len(argv) != 4:
+        raise SystemExit(f'Usage: {sys.argv[0]} ' 'portfile pricefile format')
+    portfolio_report(argv[1], argv[2], argv[3])
 
 if __name__ == '__main__':
     main(sys.argv)
