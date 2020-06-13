@@ -3,7 +3,11 @@
 # Exercise 2.4
 
 import sys, csv
+import types
 from fileparse import parse_csv
+from stock import Stock
+import tableformat
+from portfolio import Portfolio
 
 portfolio = []
 prices = {}
@@ -35,7 +39,6 @@ def read_portfolio_2(filename):
         portfolio = [ { colname: row[index] for colname, index in zip(select, indices) } for row in rows ]
     return portfolio
 
-from stock import Stock
 
 def read_portfolio_3(filename):
     '''
@@ -46,6 +49,19 @@ def read_portfolio_3(filename):
         next(rows)
         portfolio = [Stock(i[0], i[1], i[2]) for i in rows]
     return portfolio
+
+def read_portfolio_4(filename, **opts):
+    '''
+    Read portfolio using the class Portfolio in portfolio.py
+    '''
+    with open(filename) as f:
+        portdicts = parse_csv(f,
+                              select=['name', 'shares', 'price'],
+                              types=[str, int, float], 
+                              **opts)
+    #portfolio = [ Stock(d['name'], d['shares'], d['price']) for d in portdicts ]
+    portfolio = [ Stock(**d) for d in portdicts]
+    return Portfolio(portfolio)
   
 def read_prices(filename):
     '''
@@ -134,14 +150,13 @@ def print_report_2(reportdata, formatter):
         rowdata = [ name, str(shares), f'{price:0.2f}', f'{change:0.2f}' ]
         formatter.row(rowdata)
 
-import tableformat
 
 def portfolio_report(portfolio_filename, price_filename, fmt='txt'):
     '''
     operating the script
     '''
     #portfolio = parse_csv(portfolio_filename, select=['name', 'shares', 'price'], types=[str, int, float])
-    portfolio = read_portfolio_3(portfolio_filename)
+    portfolio = read_portfolio_4(portfolio_filename)
     #prices = dict(parse_csv(price_filename, types=[str, float], has_headers=False))
     read_prices(price_filename)
     make_report_2(portfolio, prices)

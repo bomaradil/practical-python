@@ -47,6 +47,15 @@ def portfolio_cost3(filename):
     cost = sum([s.cost for s in portfolio])
     return cost
 
+from report import read_portfolio_4
+
+def portfolio_cost_4(filename):
+    '''
+    compute the cost using the class Portfolio in portfolio.py
+    '''
+    portfolio = read_portfolio_4(filename)
+    return portfolio.total_cost
+
 
 def main(argv):
     if len(argv) == 2:
