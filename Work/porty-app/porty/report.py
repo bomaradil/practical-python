@@ -4,10 +4,10 @@
 
 import sys, csv
 import types
-from fileparse import parse_csv
-from stock import Stock
-import tableformat
-from portfolio import Portfolio
+from . import parse_csv 
+from . import Stock
+from . import tableformat
+from . import Portfolio
 
 portfolio = []
 prices = {}
@@ -67,8 +67,6 @@ def read_portfolio_5(file_name):
     '''
     read portfolio using class Portfolio in portfolio_2.py
     '''
-    from portfolio_2 import Portfolio
-    
     with open(file_name) as f:
         portfolio = Portfolio.from_csv(f)
     return portfolio
@@ -181,7 +179,7 @@ def main(argv):
     portfolio_report(argv[1], argv[2], argv[3])
     import logging
     logging.basicConfig(
-        filename = app.log,         #Name of the log file (omit use stderr)
+        filename = 'app.log',         #Name of the log file (omit use stderr)
         filemode = 'w',             #file mode (use 'a' to append)
         level = logging.WARNING,    #Loggin lvl (DEBUG, INFO, WARNING, ERROR, or CRITICAL)
     )

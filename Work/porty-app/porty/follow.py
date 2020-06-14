@@ -2,7 +2,7 @@
 import os 
 from sys import argv
 import time
-import report
+import .report
 
 def Follow(filename):
     with open(filename , 'r') as f:

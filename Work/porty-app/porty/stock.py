@@ -2,7 +2,7 @@
 #
 #exercise 7.7
 
-import typedproperty as type
+from  . import typedproperty as type 
 
 class Stock:
     name = type.String('name')

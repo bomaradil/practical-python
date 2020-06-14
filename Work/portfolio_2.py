@@ -3,7 +3,7 @@
 #Exercise 7.11
 
 import stock_2
-import fileparse
+from porty import fileparse
 
 class Portfolio:
     '''
