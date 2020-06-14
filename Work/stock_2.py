@@ -1,6 +1,6 @@
 #stock.py
 #
-#exercise 4.1
+#exercise 7.7
 
 import typedproperty as type
 

@@ -62,6 +62,18 @@ def read_portfolio_4(filename, **opts):
     #portfolio = [ Stock(d['name'], d['shares'], d['price']) for d in portdicts ]
     portfolio = [ Stock(**d) for d in portdicts]
     return Portfolio(portfolio)
+
+def read_portfolio_5(file_name):
+    '''
+    read portfolio using class Portfolio in portfolio_2.py
+    '''
+    from portfolio_2 import Portfolio
+    
+    with open(file_name) as f:
+        portfolio = Portfolio.from_csv(f)
+    return portfolio
+
+
   
 def read_prices(filename):
     '''
@@ -167,6 +179,12 @@ def main(argv):
     if len(argv) != 4:
         raise SystemExit(f'Usage: {sys.argv[0]} ' 'portfile pricefile format')
     portfolio_report(argv[1], argv[2], argv[3])
+    import logging
+    logging.basicConfig(
+        filename = app.log,         #Name of the log file (omit use stderr)
+        filemode = 'w',             #file mode (use 'a' to append)
+        level = logging.WARNING,    #Loggin lvl (DEBUG, INFO, WARNING, ERROR, or CRITICAL)
+    )
 
 if __name__ == '__main__':
     main(sys.argv)

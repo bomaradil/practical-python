@@ -5,7 +5,7 @@
 class Portfolio:
     def __init__(self, holdings):
         self._holdings = holdings
-    
+   
     def __iter__(self):
         return self._holdings.__iter__()
     def __len__(self):
@@ -26,3 +26,5 @@ class Portfolio:
         for s in self._holdings:
             total_shares[s.name] += s.tabulate_shares
         return total_shares
+
+    
